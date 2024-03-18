@@ -1,0 +1,25 @@
+.wrapper {
+  width: 600px;
+  margin: 100px auto;
+  box-shadow: 0 0 5px lightblue;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+main {
+  /* border: 1px solid red; */
+  /* overflow-y: scroll; */
+  /* max-height: 500px; */
+  margin-top: 10px;
+}
+
+ul {
+  padding: 0;
+}
+
+.cross {
+  text-decoration: line-through;
+}
