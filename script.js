@@ -16,6 +16,7 @@ function getDataFromLocalStorage() {
 }
 
 let todos = getDataFromLocalStorage(); // []
+let editId = null;
 
 clearAllTodosBtn.addEventListener("click", () => {
   todos = [];
@@ -39,9 +40,10 @@ clearAllTodosBtn.addEventListener("click", () => {
 
 function generateSingleTodoItem(todo) {
   const { id, text, completed } = todo;
+  const editMode = editId === id; // 3 === 1,2,3
 
   const todoItem = `
-        <div class="input-group mb-1">
+          <div class="input-group mb-1">
             <span class="input-group-text">
                 ${
                   completed
@@ -49,18 +51,43 @@ function generateSingleTodoItem(todo) {
                     : `<input  onclick="checkTodo(event, ${id})" type="checkbox" />`
                 }
             </span>
-            <input
-              disabled
-              type="text"
-              class="form-control ${completed ? "cross" : ""}"
-              value="${text}"
-            />
-            <button type="button" class="btn btn-secondary">Edit</button>
+            ${
+              editMode
+                ? `
+                <input
+                    type="text"
+                    class="form-control ${completed ? "cross" : ""}"
+                    value="${text}"/>
+                <button onclick="saveTodo(event, ${id})" type="button" class="btn btn-primary">Save</button>`
+                : `
+                <input
+                    disabled
+                    type="text"
+                    class="form-control ${completed ? "cross" : ""}"
+                    value="${text}"/>
+                <button onclick="editTodo(${id})" type="button" class="btn btn-secondary">Edit</button>`
+            }
             <button onclick="deleteTodo(${id})" type="button" class="btn btn-danger">Delete</button>
           </div>
     `;
 
   ulTodoList.innerHTML += todoItem;
+}
+
+function saveTodo(e, id) {
+  const updatedValue = e.target.previousElementSibling.value;
+  //   console.log(updatedValue);
+
+  for (const todo of todos) {
+    if (todo.id === id) {
+      todo.text = updatedValue;
+    }
+  }
+
+  editId = null;
+
+  updateLocalStorage();
+  generateTodoListView();
 }
 
 function checkTodo(e, id) {
@@ -100,6 +127,12 @@ function deleteTodo(id) {
   //   todos.splice(index, 1); // [1,2,4,5,6]
 
   updateLocalStorage();
+  generateTodoListView();
+}
+
+function editTodo(id) {
+  editId = id;
+
   generateTodoListView();
 }
 
