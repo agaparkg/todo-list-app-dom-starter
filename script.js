@@ -38,19 +38,42 @@ clearAllTodosBtn.addEventListener("click", () => {
 // ];
 
 function generateSingleTodoItem(todo) {
+  const { id, text, completed } = todo;
+
   const todoItem = `
         <div class="input-group mb-1">
+            <span class="input-group-text">
+                ${
+                  completed
+                    ? `<input checked onclick="checkTodo(event, ${id})" type="checkbox" />`
+                    : `<input  onclick="checkTodo(event, ${id})" type="checkbox" />`
+                }
+            </span>
             <input
               disabled
               type="text"
-              class="form-control"
-              value="${todo.text}"
+              class="form-control ${completed ? "cross" : ""}"
+              value="${text}"
             />
-            <button onclick="deleteTodo(${todo.id})" type="button" class="btn btn-danger">Delete</button>
+            <button type="button" class="btn btn-secondary">Edit</button>
+            <button onclick="deleteTodo(${id})" type="button" class="btn btn-danger">Delete</button>
           </div>
     `;
 
   ulTodoList.innerHTML += todoItem;
+}
+
+function checkTodo(e, id) {
+  const value = e.target.checked;
+
+  for (const todo of todos) {
+    if (todo.id === id) {
+      todo.completed = value;
+    }
+  }
+
+  updateLocalStorage();
+  generateTodoListView();
 }
 
 function deleteTodo(id) {
