@@ -24,7 +24,7 @@ function generateSingleTodoItem(todo) {
               disabled
               type="text"
               class="form-control"
-              value="Grocery shopping"
+              value="${todo.text}"
             />
             <button type="button" class="btn btn-danger">Delete</button>
           </div>
@@ -42,3 +42,25 @@ function generateTodoListView() {
 }
 
 generateTodoListView();
+
+addTodoBtn.addEventListener("click", addNewTodoFn);
+
+//
+function addNewTodoFn() {
+  const inputValue = newTodoInput.value.trim();
+
+  if (inputValue !== "") {
+    const newTodo = {
+      id: "",
+      text: inputValue,
+      completed: false,
+    };
+
+    todos.push(newTodo);
+    generateTodoListView();
+  } else {
+    alert("Please enter a text.");
+  }
+
+  newTodoInput.value = "";
+}
