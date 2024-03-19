@@ -54,17 +54,14 @@ function generateSingleTodoItem(todo) {
             ${
               editMode
                 ? `
-                <input
-                    type="text"
-                    class="form-control ${completed ? "cross" : ""}"
-                    value="${text}"/>
+                <input id="input-${id}" type="text" class="form-control ${
+                    completed ? "cross" : ""
+                  }" value="${text}"/>
                 <button onclick="saveTodo(event, ${id})" type="button" class="btn btn-primary">Save</button>`
                 : `
-                <input
-                    disabled
-                    type="text"
-                    class="form-control ${completed ? "cross" : ""}"
-                    value="${text}"/>
+                <input id="input-${id}" disabled type="text" class="form-control ${
+                    completed ? "cross" : ""
+                  }" value="${text}"/>
                 <button onclick="editTodo(${id})" type="button" class="btn btn-secondary">Edit</button>`
             }
             <button onclick="deleteTodo(${id})" type="button" class="btn btn-danger">Delete</button>
@@ -75,12 +72,15 @@ function generateSingleTodoItem(todo) {
 }
 
 function saveTodo(e, id) {
-  const updatedValue = e.target.previousElementSibling.value;
-  //   console.log(updatedValue);
+  // Opt 1
+  //   const updatedValue = e.target.previousElementSibling.value;
+
+  // Opt 2
+  const inputElem = document.querySelector(`#input-${id}`);
 
   for (const todo of todos) {
     if (todo.id === id) {
-      todo.text = updatedValue;
+      todo.text = inputElem.value;
     }
   }
 
